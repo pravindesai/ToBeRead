@@ -1,0 +1,15 @@
+mutation InsertBook($bookInsertInput:Book_insert_input!){
+    insert_Book_one(object: $bookInsertInput) {
+        BookId
+        BookImageUrl
+        BookPrice
+        BookTitle
+        Book_Tags {
+            Tag {
+                TagId
+                TagName
+            }
+        }
+        isTrending
+    }
+}

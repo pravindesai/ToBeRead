@@ -1,0 +1,11 @@
+mutation InsertUser($userInsertInputs:[User_insert_input!]!) {
+    insert_User(objects:$userInsertInputs) {
+        returning {
+            Email
+            FirstName
+            LastName
+            PhoneNumber
+            UserId
+        }
+    }
+}

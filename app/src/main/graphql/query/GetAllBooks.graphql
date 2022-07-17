@@ -1,0 +1,15 @@
+query GetAllBooks{
+    Book {
+        BookId
+        BookTitle
+        BookPrice
+        BookImageUrl
+        Genre {
+            GenreID
+            GenreName
+        }
+        IsPremium
+        isTrending
+
+    }
+}

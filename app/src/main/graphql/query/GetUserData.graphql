@@ -1,0 +1,55 @@
+query GetUserData($userId:String!){
+    User_by_pk(UserId: $userId) {
+        Email
+        FirstName
+        LastName
+        PhoneNumber
+        UserId
+        User_Books{
+            Book{
+                BookId
+                BookTitle
+            }
+        }
+        FavouriteBooks {
+            Book {
+                BookId
+                BookImageUrl
+                BookPrice
+                BookTitle
+                Book_Tags {
+                    Tag {
+                        TagId
+                        TagName
+                    }
+                }
+                Genre {
+                    GenreID
+                    GenreName
+                }
+                isTrending
+                IsPremium
+            }
+        }
+
+        TBRs {
+            Book {
+                BookId
+                BookImageUrl
+                BookPrice
+                BookTitle
+                Book_Tags {
+                    Tag {
+                        TagId
+                        TagName
+                    }
+                }
+                Genre {
+                    GenreID
+                    GenreName
+                }
+            }
+        }
+
+    }
+}

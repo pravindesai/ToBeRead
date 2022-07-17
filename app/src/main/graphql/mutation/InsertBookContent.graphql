@@ -1,0 +1,22 @@
+mutation InsertBookContent($bookContentInput:[BookContent_insert_input!]!){
+    insert_BookContent(
+        objects: $bookContentInput
+    ) {
+        affected_rows
+        returning {
+            id
+            pageContent
+            pageNumber
+            bookId
+            Book {
+                BookImageUrl
+                BookPrice
+                BookTitle
+                BookContents{
+                    pageNumber
+                    pageContent
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,8 @@
+mutation InsertGenre($insertGenresInputs:[Genre_insert_input!]!) {
+    insert_Genre(objects: $insertGenresInputs){
+        returning{
+            GenreID
+            GenreName
+        }
+    }
+}

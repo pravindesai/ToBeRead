@@ -1,0 +1,14 @@
+mutation AddBookToTBR($tbrInsertInput:[TBR_insert_input!]!) {
+    insert_TBR(objects: $tbrInsertInput){
+        returning{
+            User{
+                UserId
+                FirstName
+            }
+            Book{
+                BookId
+                BookTitle
+            }
+        }
+    }
+}

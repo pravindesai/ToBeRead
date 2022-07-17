@@ -1,0 +1,8 @@
+mutation InsertTag($insertTagInputs:[Tag_insert_input!]!) {
+    insert_Tag(objects: $insertTagInputs) {
+        returning {
+            TagId
+            TagName
+        }
+    }
+}

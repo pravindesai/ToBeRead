@@ -1,0 +1,14 @@
+mutation AssignBookToUser($userBookInsertInput:[User_Book_insert_input!]!){
+    insert_User_Book(objects: $userBookInsertInput){
+        returning{
+            User{
+                UserId
+                FirstName
+            }
+            Book{
+                BookId
+                BookTitle
+            }
+        }
+    }
+}

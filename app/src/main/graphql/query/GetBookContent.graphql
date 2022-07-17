@@ -1,0 +1,24 @@
+query GetBookContentForBook($bookId:Int!){
+    BookContent(where: {Book: {BookId: {_eq: $bookId}}}) {
+        bookId
+        pageContent
+        pageNumber
+        id
+        Book {
+            BookImageUrl
+            BookTitle
+            BookId
+            Genre {
+                GenreID
+                GenreName
+            }
+            isTrending
+            Book_Tags {
+                Tag {
+                    TagId
+                    TagName
+                }
+            }
+        }
+    }
+}

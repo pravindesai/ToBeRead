@@ -1,0 +1,14 @@
+mutation AddBookToFavourite($favouriteBookInsertInput:[FavouriteBooks_insert_input!]!){
+    insert_FavouriteBooks(objects: $favouriteBookInsertInput){
+        returning{
+            User{
+                UserId
+                FirstName
+            }
+            Book{
+                BookId
+                BookTitle
+            }
+        }
+    }
+}
