@@ -45,7 +45,6 @@ object AppModule {
             chain.proceed(builder.build())
         }.addNetworkInterceptor(httpLoggingInterceptor).build()
 
-
     @Provides
     @Singleton
     fun apolloCacheFile(application: Application): File =

@@ -1,5 +1,6 @@
     package com.onebitcompany.toberead.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -17,7 +18,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-    @AndroidEntryPoint
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @Inject
     lateinit var userRepository:UserRepository
@@ -40,4 +41,5 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
 }
