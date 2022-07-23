@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import com.google.gson.Gson
 import com.onebitcompany.toberead.app.ToBeRead
+import com.onebitcompany.toberead.socialLoginModule.User
 import java.lang.Exception
 
 object SessionManager {
@@ -11,7 +12,7 @@ object SessionManager {
     val PRIVATE_MODE = 0
     val gson: Gson
 
-    val sharedPref:SharedPreferences
+    private val sharedPref:SharedPreferences
     private val editor: SharedPreferences.Editor
 
     init {
@@ -24,6 +25,7 @@ object SessionManager {
         editor.putBoolean(key, value)
         editor.commit()
     }
+
     fun getBoolean(key: String):Boolean = sharedPref.getBoolean(key, false)
 
     fun saveInt(key:String, value:Int){
@@ -62,17 +64,17 @@ object SessionManager {
         return sharedPref.contains(key)
     }
 
-/*    fun saveCustomer(key: String, customer: Customer){
-        val serializedCustomer:String = gson.toJson(customer)
+    fun saveUser(key: String, user: User){
+        val serializedCustomer:String = gson.toJson(user)
         editor.putString(key, serializedCustomer)
         editor.apply()
     }
 
-    fun getCustomer(key: String):Customer{
+    fun getUser(key: String):User{
         val serializedCustomer:String? = sharedPref.getString(key,"")
-        val deserializedCustomer:Customer = gson.fromJson(serializedCustomer, Customer::class.java)
+        val deserializedCustomer:User = gson.fromJson(serializedCustomer, User::class.java)
         return deserializedCustomer
-    }*/
+    }
 
 
     fun clearSession():Boolean{
