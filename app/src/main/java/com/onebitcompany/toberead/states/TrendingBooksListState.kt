@@ -4,6 +4,6 @@ import com.onebitcompany.toberead.data.dto.Book
 
 data class TrendingBooksListState(
     val isLoading:Boolean = false,
-    val books:MutableList<Book>? = mutableListOf(),
+    val books:MutableList<Book>? = null,
     val error:String? = ""
 )

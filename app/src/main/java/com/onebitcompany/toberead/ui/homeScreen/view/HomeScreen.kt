@@ -1,6 +1,7 @@
 package com.onebitcompany.toberead.ui.homeScreen.view
 
 import android.os.CountDownTimer
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -22,10 +23,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -41,7 +39,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -54,6 +51,7 @@ import com.onebitcompany.toberead.R
 import com.onebitcompany.toberead.data.dto.Book
 import com.onebitcompany.toberead.data.dto.Genre
 import com.onebitcompany.toberead.data.dto.Tag
+import com.onebitcompany.toberead.states.TrendingBooksListState
 import com.onebitcompany.toberead.ui.homeScreen.viewModel.HomeViewModel
 import com.onebitcompany.toberead.ui.theme.*
 import com.skydoves.landscapist.CircularReveal
@@ -97,6 +95,8 @@ fun HomeScreen(
             timer.start()
         }
     }
+
+    initData(homeViewModel, trendingBooksListState)
 
     Box(
         modifier = Modifier
@@ -142,6 +142,15 @@ fun HomeScreen(
         }
     }
 }
+
+fun initData(homeViewModel: HomeViewModel, trendingBooksListState: State<TrendingBooksListState>) =
+    with(homeViewModel) {
+        if (trendingBooksListState.value.books==null){
+            getAvailableTags()
+            getAllGeneres()
+            getAllTrendingBooks()
+        }
+    }
 
 @Composable
 fun TitleBar(titleBarState: MutableState<Boolean>) = AnimatedVisibility(
@@ -347,16 +356,22 @@ fun GenreChipGroup(genreList: List<Genre?>?, searchText: MutableState<String>) =
 fun BookCard(
     book: Book,
     searchText: MutableState<String>? = null,
+    position: Int? = null,
     OnClick: (book: Book) -> Unit = {}
 ) = Column(
     modifier = Modifier
         .wrapContentHeight()
-        .padding(3.dp)
-        .width(130.dp)
+        .padding(
+            start = if (position == 0) 15.dp else 4.dp,
+            end = 3.dp,
+            top = 3.dp,
+            bottom = 3.dp
+        )
+        .width(120.dp)
 ) {
     Box(
         modifier = Modifier
-            .height(170.dp)
+            .height(160.dp)
             .fillMaxWidth()
     ) {
         ElevatedCard(
@@ -417,8 +432,14 @@ fun BookCard(
         }
         Column(
             modifier = Modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Bottom
+                .fillMaxSize()
+                .alpha(
+                    if (book.genres?.GenreName
+                            .toString()
+                            .isBlank()
+                    ) 0f else 1f
+                ),
+            verticalArrangement = Arrangement.Bottom,
         ) {
             Row(
                 verticalAlignment = Alignment.Bottom,
@@ -482,36 +503,33 @@ fun FilledCustomChip(
 
 
 @ExperimentalMaterial3Api
-@Preview
 @Composable
-fun TrendingSection(booksList: List<Book>? = listOf(), searchText: MutableState<String>? = null) {
+fun TrendingSection(booksList: List<Book>?, searchText: MutableState<String>? = null) = Column(
+    Modifier.alpha(if ((booksList?.size ?: 0) >= 1) 1f else 0f)
+) {
     booksList?.let {
         Text(
             text = "Trending Books",
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 10.dp),
-                fontWeight = FontWeight.SemiBold)
+            fontSize = 20.sp,
+            fontWeight = FontWeight.SemiBold
+        )
         LazyRow(
             Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
         ) {
 
-            for (i in 1..10) {
+            it.forEachIndexed { index, book ->
                 item {
                     BookCard(
-                        book = Book(
-                            BookTitle = "Thinking Fast And Slow",
-                            BookImageUrl = "https://m.media-amazon.com/images/P/B005MJFA2W.01._SCLZZZZZZZ_SX500_.jpg",
-                            BookPrice = "250",
-                            isTrending = i.mod(2) == 0,
-                            IsPremium = i.mod(2) != 0,
-                            genres = Genre(GenreName = "Fiction"),
-                            tags = mutableListOf(Tag(TagName = "tag1"), Tag(TagName = "tag2"))
-                        ), searchText = searchText
+                        book = book,
+                        position = index,
+                        searchText = searchText
                     ) {
-
+                        Log.e("***Book ", "$it")
                     }
                 }
             }
