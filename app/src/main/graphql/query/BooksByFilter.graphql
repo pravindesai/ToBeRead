@@ -1,0 +1,25 @@
+query BooksByFilter($bookExpression:Book_bool_exp!) {
+    Book(where:$bookExpression) {
+        BookId
+        BookImageUrl
+        BookPrice
+        BookTitle
+        IsPremium
+        isTrending
+        Genre {
+            GenreID
+            GenreName
+        }
+    }
+}
+
+#{
+#"bookExpression": {
+#"IsPremium": {
+#"_eq": true
+#},
+#"isTrending": {
+#"_eq": true
+#}
+#}
+#}

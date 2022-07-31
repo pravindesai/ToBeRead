@@ -1,5 +1,5 @@
 query GetTags{
-    Tag {
+    Tag(distinct_on:TagName, limit:10) {
         TagId
         TagName
     }

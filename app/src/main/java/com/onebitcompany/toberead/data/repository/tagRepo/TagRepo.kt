@@ -1,4 +1,4 @@
-package com.onebitcompany.toberead.data.Repository.tagRepo
+package com.onebitcompany.toberead.data.repository.tagRepo
 
 import com.onebitcompany.toberead.common.Resources
 import kotlinx.coroutines.flow.Flow

@@ -21,7 +21,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.onebitcompany.toberead.ui.theme.Primary
+import com.onebitcompany.toberead.ui.theme.PrimaryDark
 import com.onebitcompany.toberead.ui.theme.PrimaryLight
+import com.onebitcompany.toberead.ui.theme.White
 
 @Composable
 fun CustomBottomNavigationBar(
@@ -37,9 +39,8 @@ fun CustomBottomNavigationBar(
     ) {
         Row(
             modifier = Modifier
-                .padding(8.dp)
                 .fillMaxWidth()
-                .wrapContentHeight(),
+                .wrapContentHeight().background(PrimaryLight).padding(top = 2.dp),
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -56,9 +57,9 @@ fun CustomBottomNavigationBar(
 @Composable
 fun CustomBottomNavItem(item: AppScreen, isSelected: Boolean, onClick: () -> Unit) {
     val backgroundColor =
-        if (isSelected) PrimaryLight.copy(alpha = 0.1f) else Color.Transparent
+        if (isSelected) White.copy(alpha = 0.1f) else Color.Transparent
     val contentColor =
-        if (isSelected) Primary.copy(alpha = 0.4f) else MaterialTheme.colorScheme.onBackground
+        if (isSelected) PrimaryDark.copy(alpha = 1f) else MaterialTheme.colorScheme.onBackground
 
     Box(
         modifier = Modifier
@@ -69,7 +70,7 @@ fun CustomBottomNavItem(item: AppScreen, isSelected: Boolean, onClick: () -> Uni
     ) {
         Row(
             modifier = Modifier
-                .padding(12.dp)
+                .padding(10.dp)
                 .wrapContentHeight(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp)

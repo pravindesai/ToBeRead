@@ -13,12 +13,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
+import com.microsoft.appcenter.AppCenter
+import com.microsoft.appcenter.analytics.Analytics
+import com.microsoft.appcenter.crashes.Crashes
 import com.onebitcompany.toberead.common.Constants
 import com.onebitcompany.toberead.navigation.appNavigation.AppNavGraph
 import com.onebitcompany.toberead.navigation.appNavigation.AppScreen
@@ -26,12 +25,20 @@ import com.onebitcompany.toberead.navigation.appNavigation.CustomBottomNavigatio
 import com.onebitcompany.toberead.ui.theme.ToBeReadTheme
 import dagger.hilt.android.AndroidEntryPoint
 
+
 //Planning to name this application BookDhi
+@ExperimentalMaterial3Api
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        AppCenter.start(
+            application, "cec373d5-c86d-48ce-a8ae-9a1b01ede269",
+            Analytics::class.java, Crashes::class.java
+        )
+
         setContent {
             val navController = rememberNavController()
             val currentScreen = remember {
@@ -49,7 +56,7 @@ class MainActivity : ComponentActivity() {
                         bottomBar = {
                             CustomBottomNavigationBar(
                                 bottomBarState = bottomBarState,
-                                currentScreenId = currentScreen.value.route
+                                currentScreenId = currentScreen.value.route,
                             ) {
                                 currentScreen.value = it
                                 Log.i("**", currentScreen.value.route)
@@ -78,9 +85,9 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }
                             }
-                            AppNavGraph(navController = navController)
+                            AppNavGraph(navController = navController, bottomBarState)
                             Log.i("**", it.toString())
-                        }
+                        },
                     )
                 }
             }

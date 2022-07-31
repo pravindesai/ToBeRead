@@ -1,5 +1,5 @@
 query GetGenres{
-    Genre {
+    Genre(distinct_on:GenreName) {
         GenreID
         GenreName
     }
