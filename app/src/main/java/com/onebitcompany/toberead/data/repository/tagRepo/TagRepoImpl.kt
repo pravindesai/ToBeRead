@@ -1,18 +1,18 @@
-package com.onebitcompany.toberead.data.Repository.genreRepo
+package com.onebitcompany.toberead.data.repository.tagRepo
 
 import com.apollographql.apollo3.ApolloClient
 import com.onebitcompany.toberead.common.Resources
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import mutation.InsertGenreMutation
-import query.GetGenresQuery
-import type.Genre_insert_input
+import mutation.InsertTagMutation
+import query.GetTagsQuery
+import type.Tag_insert_input
 import javax.inject.Inject
 
-class GenreRepoImpl @Inject constructor(private val apolloClient: ApolloClient) : GenreRepo {
-    override fun insertGenre(genreInsertInput: List<Genre_insert_input>): Flow<Resources<InsertGenreMutation.Data?>> =
+class TagRepoImpl @Inject constructor(private val apolloClient: ApolloClient) : TagRepo {
+    override fun insertTags(tagInsertInputList: List<Tag_insert_input>): Flow<Resources<InsertTagMutation.Data?>> =
         flow {
-            val apolloCall = apolloClient.mutation(InsertGenreMutation(genreInsertInput))
+            val apolloCall = apolloClient.mutation(InsertTagMutation(tagInsertInputList))
             try {
                 emit(Resources.Loading())
                 apolloCall.toFlow().collect() {
@@ -23,8 +23,8 @@ class GenreRepoImpl @Inject constructor(private val apolloClient: ApolloClient) 
             }
         }
 
-    override fun getGenre(): Flow<Resources<GetGenresQuery.Data?>> = flow {
-        val apolloCall = apolloClient.query(GetGenresQuery())
+    override fun getTags(): Flow<Resources<GetTagsQuery.Data?>> = flow {
+        val apolloCall = apolloClient.query(GetTagsQuery())
         try {
             emit(Resources.Loading())
             apolloCall.toFlow().collect() {

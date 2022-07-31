@@ -1,4 +1,4 @@
-package com.onebitcompany.toberead.data.Repository.genreRepo
+package com.onebitcompany.toberead.data.repository.genreRepo
 
 import com.onebitcompany.toberead.common.Resources
 import kotlinx.coroutines.flow.Flow

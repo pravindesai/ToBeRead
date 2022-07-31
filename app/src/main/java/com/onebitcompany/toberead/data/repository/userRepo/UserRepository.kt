@@ -1,4 +1,4 @@
-package com.onebitcompany.toberead.data.Repository.userRepo
+package com.onebitcompany.toberead.data.repository.userRepo
 
 import com.onebitcompany.toberead.common.Resources
 import com.onebitcompany.toberead.data.dto.SocialUser

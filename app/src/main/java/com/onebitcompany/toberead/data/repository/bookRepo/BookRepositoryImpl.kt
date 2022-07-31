@@ -1,10 +1,11 @@
-package com.onebitcompany.toberead.data.Repository.bookRepo
+package com.onebitcompany.toberead.data.repository.bookRepo
 
 import com.apollographql.apollo3.ApolloClient
 import com.onebitcompany.toberead.common.Resources
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import mutation.*
+import query.BooksByFilterQuery
 import query.GetAllBooksQuery
 import query.GetBookContentForBookQuery
 import type.*
@@ -96,6 +97,19 @@ class BookRepositoryImpl @Inject constructor(private val apolloClient: ApolloCli
     override fun getBookContent(bookId: Int): Flow<Resources<GetBookContentForBookQuery.Data?>> =
         flow {
             val apolloCall = apolloClient.query(GetBookContentForBookQuery(bookId))
+            try {
+                emit(Resources.Loading())
+                apolloCall.toFlow().collect() {
+                    emit(Resources.Success(it.data))
+                }
+            } catch (e: Exception) {
+                emit(Resources.Error(e.message))
+            }
+        }
+
+    override fun getFilteredBooks(bookBoolExp: Book_bool_exp): Flow<Resources<BooksByFilterQuery.Data?>> =
+        flow {
+            val apolloCall = apolloClient.query(BooksByFilterQuery(bookBoolExp))
             try {
                 emit(Resources.Loading())
                 apolloCall.toFlow().collect() {

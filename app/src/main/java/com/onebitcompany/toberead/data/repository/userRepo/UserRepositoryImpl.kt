@@ -1,4 +1,4 @@
-package com.onebitcompany.toberead.data.Repository.userRepo
+package com.onebitcompany.toberead.data.repository.userRepo
 
 import com.apollographql.apollo3.ApolloClient
 import com.onebitcompany.toberead.common.Resources

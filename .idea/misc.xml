@@ -3,7 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidProjects2/ToBeRead2/app/src/main/res/drawable/ic_book_placeholder.xml" value="0.22" />
         <entry key="..\:/AndroidProjects2/ToBeRead2/app/src/main/res/drawable/ic_google.xml" value="0.133" />
+        <entry key="..\:/AndroidProjects2/ToBeRead2/app/src/main/res/drawable/ic_premium.xml" value="0.22" />
+        <entry key="..\:/AndroidProjects2/ToBeRead2/app/src/main/res/drawable/ic_trending.xml" value="0.22" />
       </map>
     </option>
   </component>
