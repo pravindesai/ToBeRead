@@ -50,7 +50,7 @@ class HomeViewModel @Inject constructor(
         getAllTrendingBooks()
     }
 
-    private fun getAvailableTags() {
+    fun getAvailableTags() {
         viewModelScope.launch {
             tagRepo.getTags().catch { e ->
                 Log.e("***", e.message.toString())
@@ -67,7 +67,7 @@ class HomeViewModel @Inject constructor(
                         )
                     }
                     is Resources.Error -> {
-                        Log.e("***", "Failed...")
+                        Log.e("***", "Failed...${result.message}")
                         _tagListState.value = TagListState(error = result.message)
                     }
                 }
@@ -75,7 +75,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getAllGeneres() {
+    fun getAllGeneres() {
         viewModelScope.launch {
             genreRepository.getGenre().catch { e ->
                 Log.e("***", e.message.toString())
@@ -97,7 +97,7 @@ class HomeViewModel @Inject constructor(
                         )
                     }
                     is Resources.Error -> {
-                        Log.e("***", "Failed...")
+                        Log.e("***", "Failed...${result.message}")
                         _genreListState.value = GenreListState(error = result.message)
                     }
                 }
@@ -105,7 +105,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getAllTrendingBooks() {
+    fun getAllTrendingBooks() {
         viewModelScope.launch {
             bookRepository.getFilteredBooks(
                 Book_bool_exp(
@@ -127,7 +127,7 @@ class HomeViewModel @Inject constructor(
                         )
                     }
                     is Resources.Error -> {
-                        Log.e("***", "Failed...")
+                        Log.e("***", "Failed...${result.message}")
                         _trendingBooksListState.value = TrendingBooksListState(error = result.message)
                     }
                 }
