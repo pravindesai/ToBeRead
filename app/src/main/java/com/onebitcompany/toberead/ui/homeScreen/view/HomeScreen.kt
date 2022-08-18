@@ -6,6 +6,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.layout.*
@@ -30,8 +31,10 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -56,6 +59,10 @@ import com.onebitcompany.toberead.ui.homeScreen.viewModel.HomeViewModel
 import com.onebitcompany.toberead.ui.theme.*
 import com.skydoves.landscapist.CircularReveal
 import com.skydoves.landscapist.glide.GlideImage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @ExperimentalMaterial3Api
@@ -75,6 +82,7 @@ fun HomeScreen(
     val tagsListState = homeViewModel.tagListState
     val genreListState = homeViewModel.genreListState
     val trendingBooksListState = homeViewModel.trendingBooksListState
+    val discoverBooksListState = homeViewModel.discoverBooksListState
 
     val mainListState = rememberLazyListState()
     val timer = object : CountDownTimer(3000, 1000) {
@@ -137,15 +145,38 @@ fun HomeScreen(
                     )
                 }
 
-            }
+                discoverBooksListState.value.books?.let {
+                    item {
+                        Text(
+                            text = "Discover Books",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 10.dp),
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
 
+                    it.forEachIndexed { index, book ->
+                        item {
+                            BookRow(
+                                book = book,
+                                searchText = searchText
+                            ) {
+                                Log.e("***Book ", "$it")
+                            }
+                        }
+                    }
+                }
+
+            }
         }
     }
 }
 
 fun initData(homeViewModel: HomeViewModel, trendingBooksListState: State<TrendingBooksListState>) =
     with(homeViewModel) {
-        if (trendingBooksListState.value.books==null){
+        if (trendingBooksListState.value.books == null) {
             getAvailableTags()
             getAllGeneres()
             getAllTrendingBooks()
@@ -393,9 +424,10 @@ fun BookCard(
                 },
                 failure = {
                     Text(text = "Image request failed.")
-                }
-            )
+//                    Image(bitmap =ImageBitmap.imageResource(R.drawable.ic_book) , contentDescription = null)
+                },
 
+            )
         }
         Column(modifier = Modifier.fillMaxSize()) {
             Row(
@@ -507,6 +539,8 @@ fun FilledCustomChip(
 fun TrendingSection(booksList: List<Book>?, searchText: MutableState<String>? = null) = Column(
     Modifier.alpha(if ((booksList?.size ?: 0) >= 1) 1f else 0f)
 ) {
+    val trendingScrollState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
     booksList?.let {
         Text(
             text = "Trending Books",
@@ -519,7 +553,9 @@ fun TrendingSection(booksList: List<Book>?, searchText: MutableState<String>? = 
         LazyRow(
             Modifier
                 .fillMaxWidth()
-                .wrapContentHeight()
+                .wrapContentHeight(),
+            state = trendingScrollState
+
         ) {
 
             it.forEachIndexed { index, book ->
@@ -533,6 +569,149 @@ fun TrendingSection(booksList: List<Book>?, searchText: MutableState<String>? = 
                     }
                 }
             }
+        }
+        coroutineScope.launch {
+            if(trendingScrollState.firstVisibleItemIndex==0){
+                trendingScrollState.animateScrollToItem(0)
+                delay(3000)
+                trendingScrollState.animateScrollBy(100f)
+            }
+        }
+    }
+}
+
+
+@ExperimentalMaterial3Api
+@Composable
+fun BookRow(
+    book: Book,
+    searchText: MutableState<String>? = null,
+    position: Int? = null,
+    modifier: Modifier = Modifier,
+    OnClick: (book: Book) -> Unit = {}
+) = Column(
+    modifier = modifier
+        .wrapContentHeight()
+        .fillMaxWidth()
+        .padding(
+            start = 15.dp,
+            end = 3.dp,
+            top = 3.dp,
+            bottom = 10.dp
+        )
+
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(140.dp)
+    ) {
+        ElevatedCard(
+            modifier = Modifier
+                .wrapContentSize()
+                .clickable { OnClick(book) }
+        ) {
+            GlideImage(
+                imageModel = book.BookImageUrl,
+                circularReveal = CircularReveal(duration = 350),
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(100.dp),
+                loading = {
+                    Box(modifier = Modifier.matchParentSize()) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+                    }
+                },
+                failure = {
+                    Text(text = "Image request failed.")
+//                    Image(bitmap =ImageBitmap.imageResource(R.drawable.ic_book) , contentDescription = null)
+
+                }
+            )
+
+        }
+
+        Box(modifier = Modifier.fillMaxHeight()) {
+
+                Column(modifier = Modifier.fillMaxHeight()) {
+                    Text(
+                        text = book.BookTitle.toString(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 5.dp, end = 5.dp, top = 5.dp),
+                        textAlign = TextAlign.Start,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 14.sp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+
+                    book.description?.let{
+                        Text(
+                            text = it,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 5.dp, end = 5.dp, top = 5.dp),
+                            textAlign = TextAlign.Start,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 14.sp,
+                            maxLines = 3,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+
+                }
+
+                Box(modifier = Modifier
+                    .fillMaxSize()
+                    .fillMaxHeight(),
+                    contentAlignment = Alignment.BottomEnd
+                ) {
+                    Row(modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.End) {
+                        Column(modifier = Modifier.padding(5.dp)
+                        ){
+                            FilledCustomChip(
+                                text = book.genres?.GenreName.toString(),
+                                chipColor = Secondary
+                            ){
+                                searchText?.value = it
+                            }
+                        }
+                        if (book.isTrending == true){
+                            Column(
+                                modifier = Modifier.padding(start = 5.dp),
+                            ) {
+                                Image(
+                                    painterResource(R.drawable.ic_trending),
+                                    modifier = Modifier
+                                        .width(15.dp)
+                                        .height(15.dp),
+                                        contentDescription = null
+                                )
+                            }
+                        }
+
+                        if(book.IsPremium == true){
+                            Column(
+                                modifier = Modifier.padding(start = 5.dp)
+                            ) {
+                                Image(
+                                    painterResource(R.drawable.ic_premium),
+                                    modifier = Modifier
+                                        .width(15.dp)
+                                        .height(15.dp),
+                                    contentDescription = null
+                                )
+                            }
+                        }
+                    }
+                }
         }
     }
 }

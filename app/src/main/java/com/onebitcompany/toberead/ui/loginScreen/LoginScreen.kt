@@ -10,6 +10,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,17 +22,21 @@ import androidx.navigation.NavController
 import com.onebitcompany.toberead.R
 import com.onebitcompany.toberead.common.Constants
 import com.onebitcompany.toberead.common.SessionManager
-import com.onebitcompany.toberead.navigation.appNavigation.AppScreen
 import com.onebitcompany.toberead.ui.theme.PrimaryDark
 import com.onebitcompany.toberead.ui.theme.PrimaryLight
 
 @Composable
-fun LoginScreen(navController: NavController) {
-    LoginUi(navController = navController)
+fun LoginScreen(
+    navController: NavController,
+    onSignInClick: (methods: String) -> Unit,
+    bottomBarState: MutableState<Boolean>
+) {
+    bottomBarState.value = false
+    LoginUi(navController = navController, onSignInClick)
 }
 
 @Composable
-fun LoginUi(navController: NavController) {
+fun LoginUi(navController: NavController, onSignInClick: (methods: String) -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -64,7 +69,7 @@ fun LoginUi(navController: NavController) {
                 verticalAlignment = Alignment.Bottom
             ) {
                 Column() {
-                    SocialButtons(navController)
+                    SocialButtons(navController, onSignInClick)
                     GuestButton(navController = navController)
                 }
             }
@@ -74,7 +79,7 @@ fun LoginUi(navController: NavController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SocialButtons(navController: NavController) {
+fun SocialButtons(navController: NavController, onSignInClick: (methods: String) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -87,7 +92,7 @@ fun SocialButtons(navController: NavController) {
                 .weight(1f)
                 .background(PrimaryLight),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
         ) {
             OutlinedCard(
                 modifier = Modifier
@@ -95,7 +100,9 @@ fun SocialButtons(navController: NavController) {
                     .wrapContentWidth()
                     .padding(2.dp),
                 border = BorderStroke(1.dp, PrimaryDark),
-
+                onClick = {
+                        onSignInClick(Constants.SIGN_IN_METHOD_GOOGLE)
+                }
                 ) {
                 Row(
                     modifier = Modifier
@@ -131,7 +138,9 @@ fun SocialButtons(navController: NavController) {
                     .wrapContentWidth()
                     .padding(2.dp),
                 border = BorderStroke(1.dp, PrimaryDark),
-
+                onClick = {
+                    onSignInClick(Constants.SIGN_IN_METHOD_FACEBOOK)
+                }
                 ) {
                 Row(
                     modifier = Modifier

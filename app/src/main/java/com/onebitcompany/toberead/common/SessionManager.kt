@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import com.google.gson.Gson
 import com.onebitcompany.toberead.app.ToBeRead
+import com.onebitcompany.toberead.common.Constants.userSessionKey
 import com.onebitcompany.toberead.socialLoginModule.User
 import java.lang.Exception
 
@@ -64,18 +65,22 @@ object SessionManager {
         return sharedPref.contains(key)
     }
 
-    fun saveUser(key: String, user: User){
+    fun saveUser(user: User){
         val serializedCustomer:String = gson.toJson(user)
-        editor.putString(key, serializedCustomer)
+        editor.putString(userSessionKey, serializedCustomer)
         editor.apply()
     }
 
-    fun getUser(key: String):User{
-        val serializedCustomer:String? = sharedPref.getString(key,"")
-        val deserializedCustomer:User = gson.fromJson(serializedCustomer, User::class.java)
+    fun getUser():User?{
+        val serializedCustomer:String? = sharedPref.getString(userSessionKey,"")
+        val deserializedCustomer:User? = gson.fromJson(serializedCustomer, User::class.java)
         return deserializedCustomer
     }
 
+
+    fun removeUser(){
+        delete(userSessionKey)
+    }
 
     fun clearSession():Boolean{
         try {

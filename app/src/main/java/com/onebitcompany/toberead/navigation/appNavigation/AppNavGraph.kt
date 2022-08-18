@@ -11,13 +11,13 @@ import com.onebitcompany.toberead.navigation.loginNavigation.loginNavGraph
 
 @ExperimentalMaterial3Api
 @Composable
-fun AppNavGraph(navController: NavHostController, bottomBarState: MutableState<Boolean>) {
+fun AppNavGraph(navController: NavHostController, bottomBarState: MutableState<Boolean>, onSocialSignInClick:(methods:String)->Unit,onSignInClick:()->Unit,onSignOutClick:()->Unit) {
     NavHost(
         navController = navController,
         startDestination = Constants.LOGIN_ROUTE,
         route = Constants.ROOT_ROUTE
     ) {
-        loginNavGraph(navController, bottomBarState)
-        dashboardNavGraph(navController, bottomBarState)
+        loginNavGraph(navController, bottomBarState, onSocialSignInClick)
+        dashboardNavGraph(navController, bottomBarState, onSignInClick, onSignOutClick)
     }
 }

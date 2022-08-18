@@ -12,7 +12,8 @@ import com.onebitcompany.toberead.ui.splashScreen.AnimatedSplashScreen
 
 fun NavGraphBuilder.loginNavGraph(
     navController: NavHostController,
-    bottomBarState: MutableState<Boolean>
+    bottomBarState: MutableState<Boolean>,
+    onSignInClick:(methods:String)->Unit
 ) {
     navigation(startDestination = AppScreen.Splash.route,
         route = Constants.LOGIN_ROUTE) {
@@ -20,7 +21,7 @@ fun NavGraphBuilder.loginNavGraph(
             AnimatedSplashScreen(navController = navController)
         }
         composable(AppScreen.Login.route) {
-            LoginScreen(navController = navController)
+            LoginScreen(navController = navController, onSignInClick, bottomBarState)
         }
     }
 }
