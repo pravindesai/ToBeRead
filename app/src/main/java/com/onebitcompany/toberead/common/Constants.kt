@@ -27,4 +27,10 @@ object Constants {
     const val GOOGLE = "Join with Google"
     const val FACEBOOK = "Join with Facebook"
 
+
+    const val SIGN_IN_METHOD_GOOGLE= "SIGN_IN_METHOD_GOOGLE"
+    const val SIGN_IN_METHOD_FACEBOOK= "SIGN_IN_METHOD_FACEBOOK"
+
+    const val userSessionKey = "USERKEY"
+
 }

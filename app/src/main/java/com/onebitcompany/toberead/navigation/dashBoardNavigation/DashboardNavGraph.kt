@@ -15,7 +15,8 @@ import com.onebitcompany.toberead.ui.settingsScreen.SettingsScreen
 @ExperimentalMaterial3Api
 fun NavGraphBuilder.dashboardNavGraph(
     navController: NavHostController,
-    bottomBarState: MutableState<Boolean>
+    bottomBarState: MutableState<Boolean>,
+    onSignInClick:()->Unit,onSignOutClick:()->Unit
 ) {
     navigation(startDestination = AppScreen.HOME.route, route = Constants.DASHBOARD_ROUTE) {
         composable(AppScreen.HOME.route) {
@@ -25,7 +26,7 @@ fun NavGraphBuilder.dashboardNavGraph(
             BookListScreen(navController = navController, bottomBarState)
         }
         composable(AppScreen.SETTINGS.route) {
-            SettingsScreen(navController = navController, bottomBarState)
+            SettingsScreen(navController = navController, bottomBarState, onSignInClick, onSignOutClick)
         }
     }
 }

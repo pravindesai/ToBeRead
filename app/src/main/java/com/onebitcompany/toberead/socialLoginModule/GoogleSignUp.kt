@@ -1,6 +1,7 @@
 package com.onebitcompany.toberead.socialLoginModule
 
 import android.content.Intent
+import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -12,7 +13,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.onebitcompany.toberead.R
 
-class GoogleSignUp(private val activity: AppCompatActivity,
+class GoogleSignUp(private val activity: ComponentActivity,
                    private val mGoogleSignInLoginListener: UserLoginListener
 ) {
 

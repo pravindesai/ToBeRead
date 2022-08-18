@@ -15,6 +15,7 @@ import com.onebitcompany.toberead.data.repository.bookRepo.BookRepository
 import com.onebitcompany.toberead.data.repository.genreRepo.GenreRepo
 import com.onebitcompany.toberead.data.repository.tagRepo.TagRepo
 import com.onebitcompany.toberead.data.repository.userRepo.UserRepository
+import com.onebitcompany.toberead.states.DiscoverBooksListState
 import com.onebitcompany.toberead.states.GenreListState
 import com.onebitcompany.toberead.states.TagListState
 import com.onebitcompany.toberead.states.TrendingBooksListState
@@ -44,10 +45,17 @@ class HomeViewModel @Inject constructor(
         mutableStateOf(TrendingBooksListState())
     val trendingBooksListState: State<TrendingBooksListState> = _trendingBooksListState
 
+
+    private val _discoverBooksListState: MutableState<DiscoverBooksListState> =
+        mutableStateOf(DiscoverBooksListState())
+    val discoverBooksListState: State<DiscoverBooksListState> = _discoverBooksListState
+
+
     init {
         getAvailableTags()
         getAllGeneres()
         getAllTrendingBooks()
+        getDiscoveredBooks()
     }
 
     fun getAvailableTags() {
@@ -129,6 +137,30 @@ class HomeViewModel @Inject constructor(
                     is Resources.Error -> {
                         Log.e("***", "Failed...${result.message}")
                         _trendingBooksListState.value = TrendingBooksListState(error = result.message)
+                    }
+                }
+            }
+        }
+    }
+
+    fun getDiscoveredBooks() {
+        viewModelScope.launch {
+            bookRepository.getAllBooks().catch { e ->
+                Log.e("***", e.message.toString())
+            }.collectLatest { result ->
+                when (result) {
+                    is Resources.Loading -> {
+                        _discoverBooksListState.value = DiscoverBooksListState(isLoading = true)
+                    }
+                    is Resources.Success -> {
+                        _discoverBooksListState.value = DiscoverBooksListState(
+                            isLoading = false,
+                            books = result.data?.Book?.map { it.getDTOBook() }?.toMutableList()
+                        )
+                    }
+                    is Resources.Error -> {
+                        Log.e("***", "Failed...${result.message}")
+                        _discoverBooksListState.value = DiscoverBooksListState(error = result.message)
                     }
                 }
             }

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">ToBeRead</string>
 
-    <string name="google_client_id">922494499318-i9pgiq6hqqvvuo9cuoeqh6padfgpnr5l.apps.googleusercontent.com</string>
+    <string name="google_client_id">25009860799-oimbtq5hdt7fc5mclqa19sv8sphbsspj.apps.googleusercontent.com</string>
     <string name="facebook_app_id">1298173960706666</string>
     <string name="fb_login_protocol_scheme">fb1298173960706666</string>
     <string name="facebook_client_token">cb98891f6ea7b1d52bce61451789aaf3</string>
