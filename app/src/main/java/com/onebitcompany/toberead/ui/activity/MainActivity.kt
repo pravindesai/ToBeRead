@@ -2,6 +2,7 @@ package com.onebitcompany.toberead.ui.activity
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.Navigator
 import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.microsoft.appcenter.AppCenter
@@ -83,9 +85,11 @@ class MainActivity : ComponentActivity(), UserLoginListener {
                                 when (destination.route) {
                                     Constants.SPLASH_SCREEN -> {
                                         bottomBarState.value = false
+                                        currentScreen.value = AppScreen.Splash
                                     }
                                     Constants.LOGIN_SCREEN -> {
                                         bottomBarState.value = false
+                                        currentScreen.value = AppScreen.Login
                                     }
                                     Constants.HOME_SCREEN -> {
                                         bottomBarState.value = true
@@ -98,6 +102,10 @@ class MainActivity : ComponentActivity(), UserLoginListener {
                                     Constants.SETTINGS_SCREEN -> {
                                         bottomBarState.value = true
                                         currentScreen.value = AppScreen.SETTINGS
+                                    }
+                                    Constants.BOOK_SCREEN->{
+                                        bottomBarState.value = false
+                                        currentScreen.value = AppScreen.BOOK
                                     }
                                 }
                             }
@@ -123,7 +131,13 @@ class MainActivity : ComponentActivity(), UserLoginListener {
                                         SessionManager.removeUser()
                                         SessionManager.saveBoolean(Constants.IS_GUEST, true)
                                         googleSignUp.signOut()
-                                    })
+                                    },
+                                onBookClick = {book->
+                                    navController?.currentBackStackEntry?.savedStateHandle?.set(
+                                        "book",book
+                                    )
+                                    navController?.navigate(AppScreen.BOOK.route)
+                                })
                             }
 
                             Log.i("**", it.toString())

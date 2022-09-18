@@ -1,8 +1,11 @@
 package com.onebitcompany.toberead.data.dto
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import query.BooksByFilterQuery
 import query.GetAllBooksQuery
 
+@Parcelize
 data class Book(
     val BookId:String?=null,
     val BookTitle:String?=null,
@@ -13,7 +16,8 @@ data class Book(
     val isTrending:Boolean?=null,
     val genres: Genre?=null,
     val tags:MutableList<Tag>?=null
-)
+) : Parcelable
+
 fun BooksByFilterQuery.Book.getDTOBook():Book{
     return Book(
         BookId= this.BookId.toString(),

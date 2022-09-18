@@ -1,7 +1,6 @@
 package com.onebitcompany.toberead.ui.homeScreen.view
 
 import android.os.CountDownTimer
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -31,10 +30,8 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -59,8 +56,6 @@ import com.onebitcompany.toberead.ui.homeScreen.viewModel.HomeViewModel
 import com.onebitcompany.toberead.ui.theme.*
 import com.skydoves.landscapist.CircularReveal
 import com.skydoves.landscapist.glide.GlideImage
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -71,6 +66,7 @@ import kotlinx.coroutines.launch
 fun HomeScreen(
     navController: NavController? = null,
     bottomBarState: MutableState<Boolean>? = null,
+    onBookClick: (book: Book) -> Unit = {},
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -141,7 +137,8 @@ fun HomeScreen(
                 item {
                     TrendingSection(
                         booksList = trendingBooksListState.value.books,
-                        searchText = searchText
+                        searchText = searchText,
+                        OnBookClick = onBookClick
                     )
                 }
 
@@ -161,10 +158,9 @@ fun HomeScreen(
                         item {
                             BookRow(
                                 book = book,
-                                searchText = searchText
-                            ) {
-                                Log.e("***Book ", "$it")
-                            }
+                                searchText = searchText,
+                                OnClick = onBookClick
+                            )
                         }
                     }
                 }
@@ -536,7 +532,9 @@ fun FilledCustomChip(
 
 @ExperimentalMaterial3Api
 @Composable
-fun TrendingSection(booksList: List<Book>?, searchText: MutableState<String>? = null) = Column(
+fun TrendingSection(booksList: List<Book>?,
+                    searchText: MutableState<String>? = null,
+                    OnBookClick: (book: Book) -> Unit = {}) = Column(
     Modifier.alpha(if ((booksList?.size ?: 0) >= 1) 1f else 0f)
 ) {
     val trendingScrollState = rememberLazyListState()
@@ -563,10 +561,9 @@ fun TrendingSection(booksList: List<Book>?, searchText: MutableState<String>? = 
                     BookCard(
                         book = book,
                         position = index,
-                        searchText = searchText
-                    ) {
-                        Log.e("***Book ", "$it")
-                    }
+                        searchText = searchText,
+                        OnClick = OnBookClick
+                    )
                 }
             }
         }
