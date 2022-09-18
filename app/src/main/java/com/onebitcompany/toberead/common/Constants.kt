@@ -16,6 +16,7 @@ object Constants {
     const val HOME_SCREEN = "home_screen"
     const val BOOK_LIST_SCREEN = "book_list_screen"
     const val SETTINGS_SCREEN = "settings_screen"
+    const val BOOK_SCREEN = "book_screen"
 
     const val LOGIN_ROUTE = "login_route"
     const val DASHBOARD_ROUTE = "dashboard_route"
