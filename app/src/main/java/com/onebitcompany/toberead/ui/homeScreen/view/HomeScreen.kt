@@ -84,7 +84,7 @@ fun HomeScreen(
     val timer = object : CountDownTimer(3000, 1000) {
         override fun onTick(millisUntilFinished: Long) {}
         override fun onFinish() {
-            bottomBarState?.value = true
+            bottomBarState?.value = false//true
 //            searchBarState.value = true
 //            titleBarState.value = true
         }
