@@ -92,15 +92,15 @@ class MainActivity : ComponentActivity(), UserLoginListener {
                                         currentScreen.value = AppScreen.Login
                                     }
                                     Constants.HOME_SCREEN -> {
-                                        bottomBarState.value = true
+                                        bottomBarState.value = false//true
                                         currentScreen.value = AppScreen.HOME
                                     }
                                     Constants.BOOK_LIST_SCREEN -> {
-                                        bottomBarState.value = true
+                                        bottomBarState.value = false//true
                                         currentScreen.value = AppScreen.BOOKLIST
                                     }
                                     Constants.SETTINGS_SCREEN -> {
-                                        bottomBarState.value = true
+                                        bottomBarState.value = false//true
                                         currentScreen.value = AppScreen.SETTINGS
                                     }
                                     Constants.BOOK_SCREEN->{

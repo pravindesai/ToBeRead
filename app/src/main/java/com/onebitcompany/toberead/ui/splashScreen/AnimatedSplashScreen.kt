@@ -38,7 +38,8 @@ fun AnimatedSplashScreen(navController: NavController) {
         startAnimation = true
         delay(4000)
 
-        if (SessionManager.containsKey(Constants.IS_GUEST)){
+
+        if (SessionManager.containsKey(Constants.IS_GUEST) || true){
             navController.popBackStack()
             navController.navigate(Constants.DASHBOARD_ROUTE)
         }else{
