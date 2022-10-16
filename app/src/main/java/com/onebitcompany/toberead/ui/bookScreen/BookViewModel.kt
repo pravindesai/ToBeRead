@@ -24,14 +24,8 @@ class BookViewModel @Inject constructor(
         mutableStateOf(BookContentState())
     val bookContentState: State<BookContentState> = _bookContentState
 
-    val count: MutableState<Int> = mutableStateOf(1)
 
-    fun add() {
-        count.value = count.value.plus(1)
-        Log.e("*** ", "Add ${count.value}")
-    }
-
-    fun getBookContentTags(bookId: Int) {
+    fun getBookContent(bookId: Int) {
         viewModelScope.launch {
             bookRepository.getBookContent(bookId).catch { e ->
                 Log.e("***", e.message.toString())

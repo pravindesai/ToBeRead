@@ -2,7 +2,9 @@ package com.onebitcompany.toberead.data.repository.bookRepo
 
 import com.apollographql.apollo3.ApolloClient
 import com.onebitcompany.toberead.common.Resources
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
 import mutation.*
 import query.BooksByFilterQuery
@@ -99,7 +101,7 @@ class BookRepositoryImpl @Inject constructor(private val apolloClient: ApolloCli
             val apolloCall = apolloClient.query(GetBookContentForBookQuery(bookId))
             try {
                 emit(Resources.Loading())
-                apolloCall.toFlow().collect() {
+                apolloCall.toFlow().collect{
                     emit(Resources.Success(it.data))
                 }
             } catch (e: Exception) {
